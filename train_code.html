@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Trainer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Trainer</h1>
+    
+    <div id="output"></div>
+    
+    <input type="text" id="userSolution" placeholder="Your solution">
+    <button onclick="checkSolution()">Submit</button>
+
+    <script>
+        class CodingExercise {
+            constructor(description, solution) {
+                this.description = description;
+                this.solution = solution;
+            }
+
+            displayExercise() {
+                document.getElementById('output').innerHTML = `<p>${this.description}</p>`;
+            }
+
+            checkSolution(userSolution) {
+                if (userSolution === this.solution) {
+                    document.getElementById('output').innerHTML = "<p>Correct!</p>";
+                    return true;
+                } else {
+                    document.getElementById('output').innerHTML = "<p>Incorrect. Try again.</p>";
+                    return false;
+                }
+            }
+        }
+
+        class JavaScriptCoder {
+            constructor(exercises) {
+                this.exercises = exercises;
+                this.currentExerciseIndex = 0;
+                this.score = 0;
+            }
+
+            displayScore() {
+                document.getElementById('output').innerHTML = `<p>Your coding score: ${this.score}/${this.exercises.length}</p>`;
+            }
+
+            displayNextExercise() {
+                if (this.currentExerciseIndex < this.exercises.length) {
+                    const currentExercise = this.exercises[this.currentExerciseIndex];
+                    currentExercise.displayExercise();
+                } else {
+                    document.getElementById('output').innerHTML = "<p>End of coding exercises.</p>";
+                    this.displayScore();
+                }
+            }
+
+            checkUserSolution(userSolution) {
+                const currentExercise = this.exercises[this.currentExerciseIndex];
+                const isCorrect = currentExercise.checkSolution(userSolution);
+
+                if (isCorrect) {
+                    this.score++;
+                    this.currentExerciseIndex++;
+                    this.displayNextExercise();
+                }
+            }
+
+            startCoding() {
+                this.displayNextExercise();
+            }
+        }
+
+        const codingExercises = [
+            new CodingExercise("Write a function that adds two numbers.", "function addNumbers(a, b) { return a + b; }"),
+            new CodingExercise("Write a function that reverses a string.", "function reverseString(str) { return str.split('').reverse().join(''); }"),
+            // Add more coding exercises as needed
+        ];
+
+        const coder = new JavaScriptCoder(codingExercises);
+
+        function checkSolution() {
+            const userSolution = document.getElementById('userSolution').value;
+            coder.checkUserSolution(userSolution);
+        }
+
+        coder.startCoding();
+    </script>
+</body>
+</html>
